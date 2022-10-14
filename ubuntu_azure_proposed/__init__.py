@@ -1,6 +1,7 @@
 import argparse
 import gzip
 import sys
+from enum import Enum
 from typing import Tuple
 
 import requests
@@ -108,7 +109,12 @@ def compare_package_versions(index: dict[str, dict[str, str]], package: str, sui
     return []
 
 
-def print_results(results) -> None:
+class Format(str, Enum):
+    TABLE = ("table",)
+    JSON = "json"
+
+
+def print_results(results, fmt: Format = Format.TABLE) -> None:
     table = PrettyTable()
     table.align = "l"
     table.field_names = ["package", "series", "current", "proposed"]
@@ -116,12 +122,17 @@ def print_results(results) -> None:
     for result in results:
         table.add_row(result)
 
-    print(table)
+    if fmt == Format.TABLE:
+        print(table)
+    elif fmt == Format.JSON:
+        table.header = False
+        print(table.get_json_string())
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Finds which package from Ubuntu Azure images are in -proposed")
     parser.add_argument("--series", "-s", dest="series", help="Restrict to a given series")
+    parser.add_argument("--format", "-F", choices=[f.value for f in Format], dest="format", help="Output format")
     args = parser.parse_args()
 
     results: list[list[str]] = list()
@@ -142,7 +153,7 @@ def main() -> None:
             if len(diff) != 0:
                 results.append(diff)
 
-    print_results(results)
+    print_results(results, args.format)
 
 
 if __name__ == "__main__":
