@@ -1,5 +1,7 @@
 # Azure -proposed
 
+## Python tool
+
 Check which of the packages included in Azure images currently have a version in RELEASE-proposed that differs from the one in RELEASE-updates (or RELEASE).
 
 How to install:
@@ -93,4 +95,19 @@ scanning jammy from http://cloud-images.ubuntu.com/releases/jammy/release/ubuntu
 | ubuntu-advantage-tools    | jammy  | 27.10.1~22.04.1                  | 27.11.1~22.04.1                  |
 | update-notifier-common    | jammy  | 3.192.54                         | 3.192.54.2                       |
 +---------------------------+--------+----------------------------------+----------------------------------+
+```
+
+## Helper script
+
+`./script/create_vms.sh` is able to parse a JSON file produced by `azure-ubuntu-proposed` and to create one VM per package. Each VM is created from the provided image, updated (using apt-get upgrade) and get a given package from -proposed installed on it. A CSV formated list of strings is returned to let the user run tests on the VMs.
+
+Usage:
+```
+SSH_KEY=PATH_TO_PUBLIC_KEY ./scripts/create_vm.sh IMAGE_URN PATH_TO_JSON_FILE
+```
+
+Example:
+```
+azure-ubuntu-proposed -s jammy -F json > packages.json
+SSH_KEY=~/.ssh/id_rsa.pub ./scripts/create_vm.sh 'Canonical:0001-com-ubuntu-server-jammy:22_04-lts-gen2:latest' packages.json
 ```
