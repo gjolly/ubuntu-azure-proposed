@@ -13,7 +13,7 @@ pip install git+https://github.com/gjolly/ubuntu-azure-proposed.git
 How to use it:
 
 ```
-usage: ubuntu-azure-proposed [-h] [--series SERIES]
+usage: ubuntu-azure-proposed [-h] [--series SERIES] [--format {table,json}]
 
 Finds which package from Ubuntu Azure images are in -proposed
 
@@ -21,6 +21,8 @@ options:
   -h, --help            show this help message and exit
   --series SERIES, -s SERIES
                         Restrict to a given series
+  --format {table,json}, -F {table,json}
+                        Output format
 ```
 
 Example output:
