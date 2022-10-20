@@ -132,7 +132,9 @@ def print_results(results, fmt: Format = Format.TABLE) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Finds which package from Ubuntu Azure images are in -proposed")
     parser.add_argument("--series", "-s", dest="series", help="Restrict to a given series")
-    parser.add_argument("--format", "-F", choices=[f.value for f in Format], dest="format", help="Output format")
+    parser.add_argument(
+        "--format", "-F", choices=[f.value for f in Format], default=Format.TABLE, dest="format", help="Output format"
+    )
     args = parser.parse_args()
 
     results: list[list[str]] = list()
